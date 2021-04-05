@@ -14,6 +14,13 @@ class HomeController extends Controller {
     const {ctx} = this;
     ctx.logger.info('请求参数:',ctx.request.body)
     try{
+      await ctx.model.User.update({
+        roleid: ctx.request.body.roleId
+      },{
+        where: {
+          account: ctx.request.body.userCreds,
+        },
+      })
       let role = await ctx.model.User.findOne({
         where: {
           account: ctx.request.body.userCreds,
@@ -75,6 +82,45 @@ class HomeController extends Controller {
       rst.data = role
     }catch(err){
       console.log(err)
+    }
+    ctx.body = rst;
+  }
+  //创建角色
+  async createRole() {
+    let rst = {
+      status: 200,
+      success: true,
+      message: ''
+    }
+    const {ctx} = this;
+    ctx.logger.info('请求参数:',ctx.request.body)
+    try{
+      let user = await ctx.model.User.findOne({
+        where: {
+          account: ctx.request.body.creds,
+        }
+      })
+      let role = await ctx.model.UserInfo.create({
+        uid: user.id,
+        status: 1,
+        role_name: ctx.request.body.roleName,
+        position_x: 0,
+        position_y: 0,
+        role_type: ctx.request.body.type,
+      })
+        rst.status = 10005;
+        rst.data = role;
+    }catch(err){
+      if(err.errors[0].type === 'unique violation'){
+        rst = {
+          status: 20003,
+          success: false,
+          message: '该角色名称已存在！',
+          err: err.errors[0].message
+        }
+      }
+      ctx.logger.error('user.createRole error: ',JSON.stringify(err.errors));
+ 
     }
     ctx.body = rst;
   }

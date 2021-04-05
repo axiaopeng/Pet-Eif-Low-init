@@ -27,12 +27,22 @@ module.exports = app => {
     }
     return user
   }
-  // don't use arraw function
+  // 登录
   User.prototype.signIn = async function() {
     return await this.update({ 
       login_status: 1,                  //登录状态
       last_sign_in_time: new Date(),    //登录时间
     });
+  }
+  //获取全部角色
+  User.prototype.getRoles = async function() {
+    return await app.model.UserInfo.findAll({
+      attributes: ['id','role_name','role_type'],
+      where: {
+        uid: this.id,
+        status: 1,
+      }
+    })
   }
   User.associate = function(){
     app.model.User.hasMany(app.model.UserInfo, {foreignKey: 'uid'})
