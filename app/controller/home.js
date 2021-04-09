@@ -22,7 +22,7 @@ class HomeController extends Controller {
       rst.creds = user.account,
       rst.message = '注册成功!';
     }catch(err){
-      if(err.errors[0].type === 'unique violation'){
+      if(err.errors&&err.errors[0].type === 'unique violation'){
         rst = {
           status: 20002,
           success: false,
@@ -59,7 +59,7 @@ class HomeController extends Controller {
         }
       }
     }catch(err){
-      console.log(err)
+      ctx.logger.error('home.login error:',err)
     }
     ctx.body = rst;
   }
