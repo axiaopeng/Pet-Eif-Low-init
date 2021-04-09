@@ -36,6 +36,7 @@ class HomeController extends Controller {
       if(role){
         rst.status = 10002;
         rst.data = { 
+          role_type: role.user_infos[0].role_type,
           name: role.user_infos[0].role_name,
           positionX: role.user_infos[0].position_x,
           positionY: role.user_infos[0].position_y,
