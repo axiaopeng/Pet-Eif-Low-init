@@ -26,7 +26,7 @@ module.exports = appInfo => {
     listen: {
       path: '',
       port: 7002,
-      hostname: '127.0.0.1',
+      hostname: '0.0.0.0',
     }
   }
 
@@ -45,7 +45,7 @@ module.exports = appInfo => {
     host: '127.0.0.1',
     port: 3306,
     username:'root',
-    password:'123456',
+    password:'cf51d21017bd0951',
     database: 'mygame',
     logging: false ,         //控制sql日志
   };

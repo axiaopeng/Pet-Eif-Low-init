@@ -18,11 +18,12 @@ class HomeController extends Controller {
         pwd: ctx.request.body.pwd,
         sign_up_time: new Date(),                 //创建时间
       })
+
       rst.status = 10004;
       rst.creds = user.account,
       rst.message = '注册成功!';
     }catch(err){
-      if(err.errors[0].type === 'unique violation'){
+      if(err.errors&&err.errors[0].type === 'unique violation'){
         rst = {
           status: 20002,
           success: false,
@@ -43,8 +44,12 @@ class HomeController extends Controller {
     const {ctx} = this;
     ctx.logger.info('登录参数:',ctx.request.body)
     try{
+            ctx.logger.info('登录参数:',1)
       let user = await ctx.model.User.findByLogin(ctx.request.body)
+
       try {
+         ctx.logger.info('登录参数:',await user.signIn())
+
         await user.signIn();
         rst.status = 10001;
         rst.creds = user.account;
@@ -52,6 +57,7 @@ class HomeController extends Controller {
         rst.roles = await user.getRoles();
         rst.message = '登录成功!';
       } catch (error) {
+                 ctx.logger.info('登录参数:',error)
         rst = {
           status: 20001,
           success: false,
@@ -59,7 +65,8 @@ class HomeController extends Controller {
         }
       }
     }catch(err){
-      console.log(err)
+      ctx.logger.info('登录参数:',4)
+      ctx.logger.error('home.login error:',4)
     }
     ctx.body = rst;
   }

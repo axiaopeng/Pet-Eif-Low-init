@@ -23,6 +23,7 @@ module.exports = app => {
     });
     //验证密码
     if(user.pwd !== login.pwd){
+        app.logger.info('密码错？', user.pwd,login.pwd)
       return 
     }
     return user
